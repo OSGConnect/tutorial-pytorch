@@ -6,11 +6,11 @@ ospool:
 The OSPool can be used as a platform to carry out machine learning and artificial intelligence research. 
 The following tutorial uses the common machine learning framework, PyTorch.
 
-## Using Pytorch on OSPool
-The preferred method of using a software on the the OSPool is to use a [container.]() The guide shows two ways of running pytorch on the OSPool. Firstly, downloading our desired version of pytorch images from dockerhub. Secondly, how to use an already created singularity container of pytorch to submit a HTCondor job on OSPool.
+## Using PyTorch on OSPool
+The preferred method of using a software on the the OSPool is to use a [container.]() The guide shows two ways of running PyTorch on the OSPool. Firstly, downloading our desired version of PyTorch images from dockerhub. Secondly, how to use an already created singularity container of PyTorch to submit a HTCondor job on OSPool.
 
 ### Pulling an Image from Docker
-**Please note that the `docker build` will not work on the access point**. Apptainer is installed on the access point and users can use Apptainer to either [build an image]() from the definition file or use `apptainer pull` to create a `.sif` file from Docker images. At the time the guide is written, the latest version of pytorch is 2.1.1. Before pulling the image/software from Docker it is a good practice to set up the cache directory of Apptainer. Run the following command on the command prompt
+**Please note that the `docker build` will not work on the access point**. Apptainer is installed on the access point and users can use Apptainer to either [build an image]() from the definition file or use `apptainer pull` to create a `.sif` file from Docker images. At the time the guide is written, the latest version of PyTorch is 2.1.1. Before pulling the image/software from Docker it is a good practice to set up the cache directory of Apptainer. Run the following command on the command prompt
 ```
 [user@ap]$ mkdir $HOME/tmp
 [user@ap]$ export TMPDIR=$HOME/tmp
@@ -30,19 +30,19 @@ The above command will create a singularity container named `pytorch-2.1.1.sif` 
 queue
 ```
 
-### Using an existing Pytorch container
+### Using an existing PyTorch container
 OSG has the `pytorch-2.1.1.sif` container image. To use the OSG built container just provide the address of the container- '/ospool/uc-shared/public/OSG-Staff/pytorch-2.1.1.sif' in to your submit file
 ```
 +SingularityImage = "osdf:///ospool/uc-shared/public/OSG-Staff/pytorch-2.1.1.sif" 
 <other usual submit file lines> 
 queue
 ```
-## Running an ML job using Pytorch
-For this tutorial, we will see how to use Pytorch to run a machine learning workflow from the MNIST database. To download the materials for this tutorial, use the command
+## Running an ML job using PyTorch
+For this tutorial, we will see how to use PyTorch to run a machine learning workflow from the MNIST database. To download the materials for this tutorial, use the command
 ```
 git clone https://github.com/OSGConnect/tutorial-pytorch
 ```
-The github repository contains a tarball of the MNIST data-`MNIST_data.tar.gz` , a wrapper script- `pytorch_cnn.sh` that untars the data and runs the python script-`main.py` to train a neural network on this MNIST database. The content of the `pytorch_cnn.sh` wrapper script is given below:
+The github repository contains a tarball of the MNIST data-`MNIST_data.tar.gz`, a wrapper script- `pytorch_cnn.sh` that untars the data and runs the python script-`main.py` to train a neural network on this MNIST database. The content of the `pytorch_cnn.sh` wrapper script is given below:
 ```
 #!/bin/bash
 echo "Hello OSPool from Job $1 running on `hostname`"
@@ -50,14 +50,14 @@ echo "Hello OSPool from Job $1 running on `hostname`"
 # untar the test and training data
 tar zxf MNIST_data.tar.gz
 
-# run the pytorch model
+# run the PyTorch model
 python main.py --save-model --epochs 20
 
 # remove the data directory
 rm -r data
 ```
 
-A submit script-`pytorch_cnn.sub` is also there to submit the pytorch job on the OSPool using the container that is provided by OSG. The contents of `pytorch_cnn.sub` file are:
+A submit script-`pytorch_cnn.sub` is also there to submit the PyTorch job on the OSPool using the container that is provided by OSG. The contents of `pytorch_cnn.sub` file are:
 ```
 # PyTorch test of convolutional neural network
 # Submit file 
@@ -89,7 +89,7 @@ request_gpus = 1
 request_memory = 3GB
 request_disk = 5GB
 
-# Tell HTCondor to run 1 instances of our job:
+# Tell HTCondor to run 1 instance of our job:
 queue 1
 ```
 Please note, if you want to use your own container please replace the `+SingularityImage` attribute accordingly. 
@@ -104,7 +104,7 @@ condor_submit pytorch_cnn.sub
 ```
 ### Output 
 The output of the code will be the CNN Network that was trained. It will be returned to us as a file
-`mnist\_cnn.pt`. The are also some output stats
+`mnist_cnn.pt`. The are also some output stats
 on the training and test error in the `pytorch_cnn.out.txt.` file 
 ```
 Test set: Average loss: 0.0278, Accuracy: 9909/10000 (99%)
